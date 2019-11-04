@@ -1,0 +1,25 @@
+{
+  "name": "sql_on_rest",
+  "version": "1.0.0",
+  "description": "Sqlite implementation project on a REST API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CTR281/SQL_on_REST.git"
+  },
+  "keywords": [
+    "Sqlite",
+    "REST",
+    "Node.js",
+    "Express"
+  ],
+  "author": "MARTIN Christian, SCHLEGEL Maxime",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CTR281/SQL_on_REST/issues"
+  },
+  "homepage": "https://github.com/CTR281/SQL_on_REST#readme"
+}
