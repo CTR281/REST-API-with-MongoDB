@@ -1,5 +1,9 @@
 var express = require('express');
+<<<<<<< HEAD
 var handler = require('../db/db_manager');
+=======
+var handler = require('../db/Handler');
+>>>>>>> 528d8bb06ed53bb3bab0bde451225950f29a83db
 
 const router = express.Router();
 
