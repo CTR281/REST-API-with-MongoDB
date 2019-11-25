@@ -5,17 +5,18 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js"
+    "dev": "ENV = DEV node server.js",
+    "prod": "ENV = PROD node server.js "
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CTR281/SQL_on_REST.git"
   },
   "keywords": [
-    "Sqlite",
     "REST",
     "Node.js",
-    "Express"
+    "Express",
+    "MongoDB"
   ],
   "author": "MARTIN Christian, SCHLEGEL Maxime",
   "license": "ISC",
@@ -25,8 +26,9 @@
   "homepage": "https://github.com/CTR281/SQL_on_REST#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "md5": "^2.2.1",
-    "sqlite3": "^4.1.0"
+    "mongodb": "^3.3.4",
   }
 }

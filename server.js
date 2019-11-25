@@ -1,3 +1,8 @@
+//Config
+require('dotenv').config();
+const env = process.env.ENV || 'development';
+const config = require("./config.js")[env];
+
 //Create express app
 var express = require("express");
 var app = express();
