@@ -12,6 +12,33 @@ const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ?
 
 const client = new MongoClient(db_url);
 
+findDocuments = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection('rpg');
+    // Find some documents
+    collection.find({}).toArray(function(err, docs) {
+        assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs);
+        callback(docs);
+    });
+};
+
+insertDocuments = function(db, callback) {
+    // Get the documents collection
+    const collection = db.collection('documents');
+    // Insert some documents
+    collection.insertMany([
+        {a : 1}, {a : 2}, {a : 3}
+    ], function(err, result) {
+        assert.equal(err, null);
+        assert.equal(3, result.result.n);
+        assert.equal(3, result.ops.length);
+        console.log("Inserted 3 documents into the collection");
+        callback(result);
+    });
+};
+
 
 class Db_controller{
 
@@ -22,18 +49,10 @@ class Db_controller{
 
             const db = client.db(db_name);
 
-            const findDocuments = function(db, res) {
-                // Get the documents collection
-                const collection = db.collection('rpg');
-                console.log("ok");
-                collection.find({}).toArray(function (err, docs) {
-                    assert.equal(err, null);
-                    console.log("Found the following records");
-                    console.log(docs);
-                    res.send(docs);
-                });
-            };
-            client.close();
+            findDocuments(db, function(docs) {
+                res.json(docs);
+                client.close();
+            });
         });
     }
 
