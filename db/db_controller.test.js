@@ -33,7 +33,7 @@ afterEach(() => { clearRPGCollection() });
 
 
 //tests
-describe('getUser', () => {
+describe('getAllDocument', () => {
     test("empty database", () => {
         expect(characters.size).toEqual(0);
     });
@@ -42,7 +42,7 @@ describe('getUser', () => {
         db_controller.addUser(db_utils.parseCharacter("Gandalf|75|Wandering Wizard"));
         db_controller.addUser(db_utils.parseCharacter("Saruman|75|White Wizard"));
 
-        var characters = db_controller.getUser();
+        var characters = db_controller.getAllDocument();
 
         expect(characters.size).toEqual(2);
         expect(characters[0]).toEqual(db_utils.parseRPG("Gandalf, 75, Wandering Wizard"));
@@ -50,4 +50,4 @@ describe('getUser', () => {
     });
 });
 
-describe('addU')
+describe('addU');
