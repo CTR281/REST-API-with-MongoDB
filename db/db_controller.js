@@ -1,15 +1,9 @@
 const config = require('config');
 const assert = require('assert');
 const mongo = require('mongodb');
+const dbUtils = require('./utils');
 const MongoClient = mongo.MongoClient;
 
-const db_host = config.get('database.host');
-const db_port = config.get('database.port');
-const db_user = config.get("database.user");
-const db_name = config.get("database.name");
-const db_password = config.get("database.password");
-
-const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
 
 findDocument = function(db, id, callback) {
     // Get the documents collection
@@ -53,8 +47,7 @@ updateDocument = function(db, id, document, callback) {
     const collection = db.collection('rpg');
     console.log(document);
     // Update document where id is id with document
-    collection.updateOne({'_id': new mongo.ObjectID(id)}
-        , { $set: document }, function(err, result) {
+    collection.updateOne({'_id': new mongo.ObjectID(id)}, { $set: document }, function(err, result) {
             assert.equal(err, null);
             result = "Updated the document with id:"+id;
             console.log("Updated the document");
@@ -76,90 +69,130 @@ const removeDocument = function(db, id, callback) {
 
 
 class Db_controller{
-
-    getDocument(req,res){
-        const client = new MongoClient(db_url);
+    getDocument(collectionName, documentId, callback) {
+        // create the client and connect to the db
+        const client = new MongoClient(dbUtils.getURL());
         client.connect(function(err){
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
+            if (err) throw err;
 
-            const db = client.db(db_name);
+            // go to the collection
+            const db = client.db(config.get('database.name'));
+            const collection = db.collection(collectionName);
 
-            findDocument(db, req.params.id, function(docs) {
-                res.json(docs);
+            // search for the document
+            collection.find({ '_id': new mongo.ObjectID(documentId) }).toArray(function(err, docs) {
+                if (err) throw err;
                 client.close();
+                callback(null, docs);
             });
+
+            // findDocument(db, collection, id, function(docs) {
+            //     res.json(docs);
+            //     client.close();
+            // });
         });
     }
 
-    getAllDocument(req,res){
-        const client = new MongoClient(db_url);
+    getAllDocument(collectionName, callback) {
+        // create the client and connect to the db
+        const client = new MongoClient(dbUtils.getURL());
         client.connect(function(err){
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
+            if (err) throw err;
 
-            const db = client.db(db_name);
+            // go to the collection
+            const db = client.db(config.get('database.name'));
+            const collection = db.collection(collectionName);
 
-            findAllDocuments(db, function(docs) {
-                res.json(docs);
+            // get all documents
+            collection.find({}).toArray(function(err, docs) {
+                if (err) throw err;
                 client.close();
+                callback(null, docs);
             });
+
+            // findAllDocuments(db, function(docs) {
+            //     res.json(docs);
+            //     client.close();
+            // });
         });
     }
 
-    addDocument(req,res){
-        const client = new MongoClient(db_url);
+    addDocument(collectionName, document, callback) {
+        // create the client and connect to the db
+        const client = new MongoClient(dbUtils.getURL());
         client.connect(function(err) {
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
+            if (err) throw err;
 
-            const db = client.db(db_name);
+            // go to the collection
+            const db = client.db(config.get('database.name'));
+            const collection = db.collection(collectionName);
 
-            insertDocuments(db, [req.body], function(result) {
-                res.send(result);
+            // Insert the documents
+            collection.insertOne(document, function(err) {
+                if (err) throw err;
                 client.close();
+                callback(null);
             });
+
+            // insertDocuments(db, [req.body], function(result) {
+            //     res.send(result);
+            //     client.close();
+            // });
         });
     }
 
-    updateDocument(req,res){
-        const client = new MongoClient(db_url);
+    updateDocument(collectionName, documentId, document ,callback) {
+        // create the client and connect to the db
+        const client = new MongoClient(dbUtils.getURL());
         client.connect(function(err) {
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
+            if (err) throw err;
 
-            const db = client.db(db_name);
+            // go to the collection
+            const db = client.db(config.get('database.name'));
+            const collection = db.collection(collectionName);
 
-            updateDocument(db, req.params.id, req.body, function(result) {
-                res.send(result);
+            // Update document where id is document's id with document
+            collection.updateOne({'_id': new mongo.ObjectID(id)}, { $set: document }, function(err, result) {
+                if (err) throw err;
                 client.close();
+                callback(null);
             });
+
+
+            // updateDocument(db, req.params.id, req.body, function(result) {
+            //     res.send(result);
+            //     client.close();
+            // });
         });
     }
 
-    deleteDocument(req,res){
+    deleteDocument(collectionName, documentId, callback) {
+        // create the client and connect to the db
         const client = new MongoClient(db_url);
         client.connect(function(err){
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
+            if (err) throw err;
 
-            const db = client.db(db_name);
+            // go to the collection
+            const db = client.db(config.get('database.name'));
+            const collection = db.collection(collectionName);
 
-            removeDocument(db, req.params.id, function(result) {
-                res.send(result);
+            // Delete document where id is id
+            collection.deleteOne({'_id': new mongo.ObjectID(id)}, function(err, callback) {
+                if (err) throw err;
                 client.close();
+                callback(null);
             });
+
+            // removeDocument(db, req.params.id, function(result) {
+            //     res.send(result);
+            //     client.close();
+            // });
         });
     }
 }
 
+
 const controller = new Db_controller();
-module.exports = {
-    controller,
-    findAllDocuments,
-    findDocument,
-    insertDocuments,
-    updateDocument,
-    removeDocument
-};
+
+module.exports = controller;
 
