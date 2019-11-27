@@ -11,7 +11,7 @@ function fakeCharacter () {
 }
 
 function parseCharacter(toParse) {
-    var array = toParse.split('|');
+    const array = toParse.split('|');
     return { name: array[0],
              level:parseInt(array[1]),
              class: array[2] }

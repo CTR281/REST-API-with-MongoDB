@@ -18,7 +18,7 @@ function clearRPGCollection() {
     const client = new mongoClient(db_url);
     client.connect(function(err) {
         if (err) throw err;
-        const targetDb = client.db(dbName);
+        const targetDb = client.db(db_name);
         const targetCollection = targetDb.collection("rpg");
         targetCollection.deleteMany(new Document());
         client.close();
