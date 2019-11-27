@@ -8,7 +8,7 @@ const db_user = config.get("database.user");
 const db_name = config.get("database.name");
 const db_password = config.get("database.password");
 
-const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_host}/` : "") + "/";
+const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
 
 const client = new MongoClient(db_url);
 
