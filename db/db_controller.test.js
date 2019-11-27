@@ -5,12 +5,7 @@ const db_controller = require('./db_controller');
 const db_utils = require('./utils');
 
 // db connection info
-const db_host = config.get('database.host');
-const db_port = config.get('database.port');
-const db_user = config.get("database.user");
-const db_name = config.get("database.name");
-const db_password = config.get("database.password");
-const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
+const db_url = db_utils.getURL();
 
 
 // delete all document in the rpg collection
@@ -33,8 +28,10 @@ afterEach(() => { clearRPGCollection() });
 
 
 //tests
-describe('getAllDocument', () => {
+describe('getAllDocument & addUser', () => {
     test("empty database", () => {
+        const characters = db_controller.getAllDocument();
+
         expect(characters.size).toEqual(0);
     });
 
@@ -42,12 +39,29 @@ describe('getAllDocument', () => {
         db_controller.addUser(db_utils.parseCharacter("Gandalf|75|Wandering Wizard"));
         db_controller.addUser(db_utils.parseCharacter("Saruman|75|White Wizard"));
 
-        var characters = db_controller.getAllDocument();
+        const characters = db_controller.getAllDocument();
 
         expect(characters.size).toEqual(2);
-        expect(characters[0]).toEqual(db_utils.parseRPG("Gandalf, 75, Wandering Wizard"));
-        expect(characters[1]).toEqual(db_utils.parseRPG("Saruman, 75, White Wizard"));
+        expect(characters[0]).toEqual(db_utils.parseCharacter("Gandalf, 75, Wandering Wizard"));
+        expect(characters[1]).toEqual(db_utils.parseCharacter("Saruman, 75, White Wizard"));
     });
 });
 
-describe('addU');
+describe("updateUser", () => {
+    test("normal usage", () => {
+
+    });
+
+    test("user don't exist", () => {
+
+    })
+});
+
+describe("deleteUser", () => {
+    test("normal usage", () => {
+
+    });
+    test("user don't exist", () => {
+
+    })
+});
