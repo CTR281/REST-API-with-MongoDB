@@ -35,17 +35,14 @@ findAllDocuments = function(db, callback) {
     });
 };
 
-insertDocuments = function(db, callback) {
+insertDocuments = function(db, data, callback) {
     // Get the documents collection
     const collection = db.collection('rpg');
     // Insert some documents
-    collection.insertMany([
-        {a : 1}, {a : 2}, {a : 3}
-    ], function(err, result) {
+    collection.insertMany(data, function(err, result) {
         assert.equal(err, null);
-        assert.equal(3, result.result.n);
-        assert.equal(3, result.ops.length);
-        console.log("Inserted 3 documents into the collection");
+        result = "Inserted documents into the collection";
+        console.log(result);
         callback(result);
     });
 };
@@ -83,8 +80,19 @@ class Db_controller{
         });
     }
 
-    addUser(req,res){
-        return res.status(200).send("ok");
+    addDocument(req,res){
+        const client = new MongoClient(db_url);
+        client.connect(function(err) {
+            assert.equal(null, err);
+            console.log("Connected successfully to server");
+
+            const db = client.db(db_name);
+
+            insertDocuments(db, [req.body], function(result) {
+                res.send(result);
+                client.close();
+            });
+        });
     }
 
     updateUser(req,res){
@@ -97,6 +105,11 @@ class Db_controller{
 
 }
 
-const handler = new Db_controller();
-module.exports = handler;
+const controller = new Db_controller();
+module.exports = {
+    controller,
+    findAllDocuments,
+    findDocument,
+    insertDocuments
+};
 

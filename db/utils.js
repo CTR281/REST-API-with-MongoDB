@@ -1,7 +1,7 @@
 var mongoClient = require('mongodb').MongoClient;
 const faker = require('faker');
 var randomInt = require('random-int');
-
+const config = require('config');
 
 function fakeCharacter () {
     // return a fake rpg character
