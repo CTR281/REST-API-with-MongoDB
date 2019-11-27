@@ -39,6 +39,7 @@ insertDocuments = function(db, data, callback) {
     // Get the documents collection
     const collection = db.collection('rpg');
     // Insert some documents
+    console.log(data);
     collection.insertMany(data, function(err, result) {
         assert.equal(err, null);
         result = "Inserted documents into the collection";
@@ -47,10 +48,23 @@ insertDocuments = function(db, data, callback) {
     });
 };
 
+updateDocument = function(db, id, document, callback) {
+    // Get the documents collection
+    const collection = db.collection('rpg');
+    console.log(document);
+    // Update document where a is 2, set b equal to 1
+    collection.updateOne({'_id': new mongo.ObjectID(id)}
+        , { $set: document }, function(err, result) {
+            assert.equal(err, null);
+            result = "Updated the document with id:"+id;
+            console.log("Updated the document");
+            callback(result);
+        });
+};
 
 class Db_controller{
 
-    getDocument(req,res, id){
+    getDocument(req,res){
         const client = new MongoClient(db_url);
         client.connect(function(err){
             assert.equal(null, err);
@@ -58,7 +72,7 @@ class Db_controller{
 
             const db = client.db(db_name);
 
-            findDocument(db, id, function(docs) {
+            findDocument(db, req.params.id, function(docs) {
                 res.json(docs);
                 client.close();
             });
@@ -95,8 +109,19 @@ class Db_controller{
         });
     }
 
-    updateUser(req,res){
-        return res.status(200).send("ok");
+    updateDocument(req,res){
+        const client = new MongoClient(db_url);
+        client.connect(function(err) {
+            assert.equal(null, err);
+            console.log("Connected successfully to server");
+
+            const db = client.db(db_name);
+
+            updateDocument(db, req.params.id, req.body, function(result) {
+                res.send(result);
+                client.close();
+            });
+        });
     }
 
     deleteUser(req,res){
