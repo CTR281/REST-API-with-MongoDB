@@ -52,7 +52,7 @@ updateDocument = function(db, id, document, callback) {
     // Get the documents collection
     const collection = db.collection('rpg');
     console.log(document);
-    // Update document where a is 2, set b equal to 1
+    // Update document where id is id with document
     collection.updateOne({'_id': new mongo.ObjectID(id)}
         , { $set: document }, function(err, result) {
             assert.equal(err, null);
@@ -61,6 +61,19 @@ updateDocument = function(db, id, document, callback) {
             callback(result);
         });
 };
+
+const removeDocument = function(db, id, callback) {
+    // Get the documents collection
+    const collection = db.collection('rpg');
+    // Delete document where id is id
+    collection.deleteOne({'_id': new mongo.ObjectID(id)}, function(err, result) {
+        assert.equal(err, null);
+        result = "Removed the document with the id:" + id;
+        console.log("Removed the document with the id:");
+        callback(result);
+    });
+};
+
 
 class Db_controller{
 
@@ -124,10 +137,20 @@ class Db_controller{
         });
     }
 
-    deleteUser(req,res){
-        return res.status(200).send("ok");
-    }
+    deleteDocument(req,res){
+        const client = new MongoClient(db_url);
+        client.connect(function(err){
+            assert.equal(null, err);
+            console.log("Connected successfully to server");
 
+            const db = client.db(db_name);
+
+            removeDocument(db, req.params.id, function(result) {
+                res.send(result);
+                client.close();
+            });
+        });
+    }
 }
 
 const controller = new Db_controller();
@@ -135,6 +158,8 @@ module.exports = {
     controller,
     findAllDocuments,
     findDocument,
-    insertDocuments
+    insertDocuments,
+    updateDocument,
+    removeDocument
 };
 
