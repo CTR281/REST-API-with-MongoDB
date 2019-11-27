@@ -12,7 +12,19 @@ const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ?
 
 const client = new MongoClient(db_url);
 
-findDocuments = function(db, callback) {
+findDocument = function(db, id, callback) {
+    // Get the documents collection
+    const collection = db.collection('rpg');
+    // Find some documents
+    collection.find({'_id': id}).toArray(function(err, docs) {
+        assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs);
+        callback(docs);
+    });
+};
+
+findAllDocuments = function(db, callback) {
     // Get the documents collection
     const collection = db.collection('rpg');
     // Find some documents
@@ -26,7 +38,7 @@ findDocuments = function(db, callback) {
 
 insertDocuments = function(db, callback) {
     // Get the documents collection
-    const collection = db.collection('documents');
+    const collection = db.collection('rpg');
     // Insert some documents
     collection.insertMany([
         {a : 1}, {a : 2}, {a : 3}
@@ -42,14 +54,28 @@ insertDocuments = function(db, callback) {
 
 class Db_controller{
 
-    getUser(req,res){
+    getDocument(req,res, id){
         client.connect(function(err){
             assert.equal(null, err);
             console.log("Connected successfully to server");
 
             const db = client.db(db_name);
 
-            findDocuments(db, function(docs) {
+            findDocument(db, id, function(docs) {
+                res.json(docs);
+                client.close();
+            });
+        });
+    }
+
+    getAllDocument(req,res){
+        client.connect(function(err){
+            assert.equal(null, err);
+            console.log("Connected successfully to server");
+
+            const db = client.db(db_name);
+
+            findAllDocuments(db, function(docs) {
                 res.json(docs);
                 client.close();
             });

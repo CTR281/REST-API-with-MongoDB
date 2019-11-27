@@ -1,28 +1,23 @@
-//Config
-require('dotenv').config();
-const env = process.env.ENV || 'development';
-const config = require("./config.js")[env];
-
 //Create express app
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
 
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //Routes
-var router=require('./routes/index');
+const apiRouter=require('./routes/rpg');
 
 // Server port
-var HTTP_PORT = 3000;
+const HTTP_PORT = 3000;
 
 //Start server
 app.listen(HTTP_PORT, () =>
     {console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
-app.use(router);
+app.use('/rpg', apiRouter);
 
 app.use((req,res) => {
     res.status(404);
