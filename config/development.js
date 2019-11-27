@@ -1,4 +1,7 @@
 const config = {
+    server:{
+        port: "8080"
+    },
     database: { //database connection info
         host: 'clusterdfsromarin-jna6x.mongodb.net',
         port: '',
