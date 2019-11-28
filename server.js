@@ -19,8 +19,8 @@ app.listen(HTTP_PORT, () =>
     {console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
-app.use('/', apiRouter);
+app.use('/rpg', apiRouter);
 
 app.use((req,res) => {
-    res.status(404);
+    res.status(404).send("This page does not exist");
 });
