@@ -1,7 +1,7 @@
 // imports
 const config = require('config');
 const mongoClient = require('mongodb').MongoClient;
-const db_controller = require('./rpgController');
+const db_controller = require('../controller/rpgController');
 const db_utils = require('./utils');
 
 // controller connection info
