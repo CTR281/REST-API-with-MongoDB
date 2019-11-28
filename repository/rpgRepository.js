@@ -9,15 +9,15 @@ findDocument = function(db, collection, id, callback) {
         return callback({error:"Invalid id"});
     }
     // Find some documents
-    _collection.find({'_id': new mongo.ObjectID(id)}).toArray(function(err, docs) {
+    _collection.find({'_id': new mongo.ObjectID(id)}).toArray(function(err, result) {
         if (!err){
             console.log("Found the following records");
-            console.log(docs);
-            callback({docs: docs});
+            console.log(result);
+            callback({docs: result});
         }
         else{
             console.log(err);
-            callback(err);
+            callback({error:err});
         }
     });
 };
@@ -29,7 +29,7 @@ findAllDocuments = function(db, collection, callback) {
     _collection.find({}).toArray(function(err, docs) {
         console.log("Found the following records");
         console.log(docs);
-        callback(docs);
+        callback({docs:docs});
     });
 };
 
@@ -41,7 +41,7 @@ insertDocuments = function(db, collection, data, callback) {
     _collection.insertMany(data, function(err, result) {
         result = "Inserted documents into the collection";
         console.log(result);
-        callback(result);
+        callback({message:result});
     });
 };
 
@@ -53,7 +53,7 @@ updateDocument = function(db, collection, id, document, callback) {
         , { $set: document }, function(err, result) {
             result = "Updated the document with id:"+id;
             console.log("Updated the document");
-            callback(result);
+            callback({message:result});
         });
 };
 
@@ -63,8 +63,8 @@ removeDocument = function(db, collection, id, callback) {
     // Delete document where id is id
     _collection.deleteOne({'_id': new mongo.ObjectID(id)}, function(err, result) {
         result = "Removed the document with the id:" + id;
-        console.log("Removed the document with the id:");
-        callback(result);
+        console.log("Removed the document with id:");
+        callback({message:result});
     });
 };
 

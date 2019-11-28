@@ -38,8 +38,8 @@ class rpgController{
             const db = client.db(DB.name);
             const collection  = req.params.collection;
 
-            rpgRepository.findAllDocuments(db, collection,function(docs) {
-                res.json(docs);
+            rpgRepository.findAllDocuments(db, collection,function(result) {
+                res.json(result.docs);
                 client.close();
             });
         });
@@ -57,7 +57,7 @@ class rpgController{
             console.log(document);
 
             rpgRepository.insertDocuments(db, collection, document, function(result) {
-                res.send(result);
+                res.send(result.message);
                 client.close();
             });
         });
@@ -74,9 +74,20 @@ class rpgController{
             const id = req.params.id;
             const document = req.body;
 
-            rpgRepository.updateDocument(db, collection, id, document, function(result) {
-                res.send(result);
-                client.close();
+            rpgRepository.findDocument(db, collection, id, function(result){
+                console.log(result.docs.length);
+                if (result.docs.length > 0){
+                    rpgRepository.updateDocument(db, collection, id, document, function(result) {
+                        res.send(result.message);
+                        client.close();
+                    });
+                }else{
+                    console.log(document);
+                    rpgRepository.insertDocuments(db, collection, document, function(result){
+                        res.send(result.message);
+                        client.close();
+                    });
+                }
             });
         });
     }
@@ -88,11 +99,11 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
-            const collection  = req.params.collection;
+            const collection = req.params.collection;
             const id = req.params.id;
 
             rpgRepository.removeDocument(db, collection, id, function(result) {
-                res.send(result);
+                res.send(result.message);
                 client.close();
             });
         });
