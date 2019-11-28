@@ -18,12 +18,11 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
+            const collection  = req.params.collection;
             const id = req.params.id;
-            if (id.length === 12 || 24){
 
-            }
 
-            rpgRepository.findDocument(db, req.params.id, function(docs) {
+            rpgRepository.findDocument(db, collection, id, function(docs) {
                 res.json(docs);
                 client.close();
             });
@@ -37,8 +36,9 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
+            const collection  = req.params.collection;
 
-            rpgRepository.findAllDocuments(db, function(docs) {
+            rpgRepository.findAllDocuments(db, collection,function(docs) {
                 res.json(docs);
                 client.close();
             });
@@ -52,9 +52,11 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
-            const document = req.body.toArray();
+            const collection  = req.params.collection;
+            const document = [req.body];
+            console.log(document);
 
-            rpgRepository.insertDocuments(db, document, function(result) {
+            rpgRepository.insertDocuments(db, collection, document, function(result) {
                 res.send(result);
                 client.close();
             });
@@ -68,8 +70,11 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
+            const collection  = req.params.collection;
+            const id = req.params.id;
+            const document = req.body;
 
-            rpgRepository.updateDocument(db, req.params.id, req.body, function(result) {
+            rpgRepository.updateDocument(db, collection, id, document, function(result) {
                 res.send(result);
                 client.close();
             });
@@ -83,8 +88,10 @@ class rpgController{
             console.log("Connected successfully to server");
 
             const db = client.db(DB.name);
+            const collection  = req.params.collection;
+            const id = req.params.id;
 
-            rpgRepository.removeDocument(db, req.params.id, function(result) {
+            rpgRepository.removeDocument(db, collection, id, function(result) {
                 res.send(result);
                 client.close();
             });
@@ -93,6 +100,7 @@ class rpgController{
 }
 
 const controller = new rpgController();
+
 module.exports = {
     controller,
 };

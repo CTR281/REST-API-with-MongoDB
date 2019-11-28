@@ -19,7 +19,7 @@ app.listen(HTTP_PORT, () =>
     {console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
-app.use('/rpg', apiRouter);
+app.use('/', apiRouter);
 
 app.use((req,res) => {
     res.status(404);

@@ -1,64 +1,63 @@
 const mongo = require('mongodb');
-const assert = require('assert');
 
 
-findDocument = function(db, id, callback) {
+findDocument = function(db, collection, id, callback) {
     // Get the documents collection
-    const collection = db.collection('rpg');
+    const _collection = db.collection(collection);
     // Find some documents
-    collection.find({'_id': new mongo.ObjectID(id)}).toArray(function(err, docs) {
-        assert.equal(err, null);
+    _collection.find({'_id': new mongo.ObjectID(id)}).toArray(function(err, result) {
+        if (!err){
+            console.log("Found the following records");
+            console.log(result);
+            callback(result);
+        }
+        else{
+            console.log(err);
+            callback(err);
+        }
+    });
+};
+
+findAllDocuments = function(db, collection, callback) {
+    // Get the documents collection
+    const _collection = db.collection(collection);
+    // Find some documents
+    _collection.find({}).toArray(function(err, docs) {
         console.log("Found the following records");
         console.log(docs);
         callback(docs);
     });
 };
 
-findAllDocuments = function(db, callback) {
+insertDocuments = function(db, collection, data, callback) {
     // Get the documents collection
-    const collection = db.collection('rpg');
-    // Find some documents
-    collection.find({}).toArray(function(err, docs) {
-        assert.equal(err, null);
-        console.log("Found the following records");
-        console.log(docs);
-        callback(docs);
-    });
-};
-
-insertDocuments = function(db, data, callback) {
-    // Get the documents collection
-    const collection = db.collection('rpg');
+    const _collection = db.collection(collection);
     // Insert some documents
     console.log(data);
-    collection.insertMany(data, function(err, result) {
-        assert.equal(err, null);
+    _collection.insertMany(data, function(err, result) {
         result = "Inserted documents into the collection";
         console.log(result);
         callback(result);
     });
 };
 
-updateDocument = function(db, id, document, callback) {
+updateDocument = function(db, collection, id, document, callback) {
     // Get the documents collection
-    const collection = db.collection('rpg');
-    console.log(document);
+    const _collection = db.collection(collection);
     // Update document where id is id with document
-    collection.updateOne({'_id': new mongo.ObjectID(id)}
+    _collection.updateOne({'_id': new mongo.ObjectID(id)}
         , { $set: document }, function(err, result) {
-            assert.equal(err, null);
             result = "Updated the document with id:"+id;
             console.log("Updated the document");
             callback(result);
         });
 };
 
-removeDocument = function(db, id, callback) {
+removeDocument = function(db, collection, id, callback) {
     // Get the documents collection
-    const collection = db.collection('rpg');
+    const _collection = db.collection(collection);
     // Delete document where id is id
-    collection.deleteOne({'_id': new mongo.ObjectID(id)}, function(err, result) {
-        assert.equal(err, null);
+    _collection.deleteOne({'_id': new mongo.ObjectID(id)}, function(err, result) {
         result = "Removed the document with the id:" + id;
         console.log("Removed the document with the id:");
         callback(result);
