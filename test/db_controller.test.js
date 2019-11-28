@@ -1,7 +1,7 @@
 // imports
-const mongoClient = require('mongodb').MongoClient;
-const db_controller = require('./db_controller');
-const db_utils = require('./utils');
+const MongoClient = require('mongodb').MongoClient;
+const db_controller = require('../db/db_controller');
+const db_utils = require('../db/utils');
 
 // db connection info
 const db_url = db_utils.getURL();
@@ -9,7 +9,7 @@ const db_url = db_utils.getURL();
 
 // delete all document in the rpg collection
 function clearRPGCollection() {
-    const client = new mongoClient(db_url);
+    const client = new MongoClient(db_url);
     client.connect(function(err) {
         if (err) {
             console.log(db_url);

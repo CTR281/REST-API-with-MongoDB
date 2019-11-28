@@ -4,7 +4,7 @@
   "description": "DB implementation project on a REST API",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test jest ./db/db_controller.test.js",
+    "test": "NODE_ENV=test jest test/rpgRepository.test.js",
     "dev": "NODE_ENV=development nodemon server.js",
     "prod": "NODE_ENV=production node server.js "
   },
