@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //Routes
-const apiRouter=require('./routes/characters');
+const apiRouter=require('./routes/rpg');
 
 // Server port
 const HTTP_PORT = config.get("server.port");
@@ -18,8 +18,7 @@ app.listen(HTTP_PORT, () =>
     {console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
-//handler for the routes
-app.use('/api', apiRouter);
+app.use('/rpg', apiRouter);
 
 app.use((req,res) => {
     res.status(404);
