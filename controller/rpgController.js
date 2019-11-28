@@ -22,8 +22,8 @@ class rpgController{
             const id = req.params.id;
 
 
-            rpgRepository.findDocument(db, collection, id, function(docs) {
-                res.json(docs);
+            rpgRepository.findDocument(db, collection, id, function(result) {
+                result.error?res.send(result.error):res.json(result.docs);
                 client.close();
             });
         });
