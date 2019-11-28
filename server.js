@@ -22,5 +22,6 @@ app.listen(HTTP_PORT, () =>
 app.use('/rpg', apiRouter);
 
 app.use((req,res) => {
-    res.status(404).send("This page does not exist");
+    res.status(404).send("This page does not exist")});
+
 
