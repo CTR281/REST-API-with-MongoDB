@@ -168,7 +168,7 @@ class Db_controller{
 
     deleteDocument(collectionName, documentId, callback) {
         // create the client and connect to the db
-        const client = new MongoClient(db_url);
+        const client = new MongoClient(dbUtils.getURL());
         client.connect(function(err){
             if (err) throw err;
 

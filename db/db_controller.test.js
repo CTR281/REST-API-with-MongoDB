@@ -82,38 +82,61 @@ describe("getDocument", () => {
 
 describe("updateDocument", () => {
     test("document doesn't exist", () => {
-        db_controller.updateDocument("test", db_utils.parseCharacter("Gandalf, 75, White Wizard"),
+        db_controller.updateDocument("rpg", "test", db_utils.parseCharacter("Gandalf|75|White Wizard"),
             function(err) {
                 expect(err).toBeNull();
         })
     });
 
-    //TODO: a finir
     test("normal usage", () => {
-        db_controller.addDocument(db_utils.parseCharacter("Gandalf|75|Grey Wizard"));
+        db_controller.addDocument("rpg", db_utils.parseCharacter("Gandalf|75|Grey Wizard"),
+            function(err) {
+                expect(err).toBeNull();
+            });
 
-        let characters = db_controller.getAllDocument();
-        const id = characters[0].id;
-        db_controller.updateDocument(id, db_utils.parseCharacter("Gandalf, 75, White Wizard"));
-        characters = db_controller.getAllDocument();
+        db_controller.getAllDocument("rpg",
+            function(err, docs) {
+                db_controller.updateDocument("rpg", docs[0].id,db_utils.parseCharacter("Gandalf|75|White Wizard"),
+                    function (err, docs) {
+                        expect(err).toBeNull();
+                    });
+            });
 
-        expect(characters.size).toEqual(1);
-        expect(characters[0]).toEqual(db_utils.parseCharacter("Gandalf, 75, White Wizard"));
+        db_controller.getAllDocument("rpg",
+            function(err, docs) {
+                expect(err).toBeNull();
+                expect(docs.size).toEqual(1);
+                expect(docs[0]).toEqual(db_utils.parseCharacter("Gandalf|75|White Wizard"));
+            })
     });
 });
 
 describe("deleteDocument", () => {
     test("document doesn't exist", () => {
-        db_controller.deleteDocument("test");
+        db_controller.deleteDocument("rpg", "test",
+            function(err) {
+                expect(err).toBeNull();
+            });
     });
+
     test("normal useage", () => {
-        db_controller.addDocument(db_utils.parseCharacter("Gandalf|75|Grey Wizard"));
+        db_controller.addDocument("rpg", db_utils.parseCharacter("Gandalf|75|Grey Wizard"),
+            function(err) {
+                expect(err).toBeNull();
+            });
 
-        let characters = db_controller.getAllDocument();
-        const id = characters[0].id;
-        db_controller.deleteDocument(id, db_utils.parseCharacter("Gandalf, 75, White Wizard"));
-        characters = db_controller.getAllDocument();
+        db_controller.getAllDocument("rpg",
+            function(err, docs) {
+                db_controller.deleteDocument("rpg", docs[0].id,
+                    function (err) {
+                        expect(err).toBeNull();
+                    });
+            });
 
-        expect(characters.size).toEqual(0);
-    })
+        db_controller.getAllDocument("rpg",
+            function(err, docs) {
+                expect(err).toBeNull();
+                expect(docs.size).toEqual(0);
+            });
+    });
 });
