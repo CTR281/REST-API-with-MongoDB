@@ -1,4 +1,5 @@
 //Create express app
+const config = require('config');
 const express = require("express");
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(bodyParser.json());
 const apiRouter=require('./routes/rpg');
 
 // Server port
-const HTTP_PORT = 3000;
+const HTTP_PORT = config.get("server.port");
 
 //Start server
 app.listen(HTTP_PORT, () =>

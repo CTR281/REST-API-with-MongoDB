@@ -151,15 +151,9 @@ class Db_controller{
             });
         });
     }
+
 }
 
 const controller = new Db_controller();
-module.exports = {
-    controller,
-    findAllDocuments,
-    findDocument,
-    insertDocuments,
-    updateDocument,
-    removeDocument
-};
+module.exports = controller;
 

@@ -1,7 +1,7 @@
+const config = require('config');
 var mongoClient = require('mongodb').MongoClient;
 const faker = require('faker');
 var randomInt = require('random-int');
-const config = require('config');
 
 function fakeCharacter () {
     // return a fake rpg character
@@ -15,15 +15,6 @@ function parseCharacter(toParse) {
     return { name: array[0],
         level:parseInt(array[1]),
         class: array[2] }
-}
-
-function  getURL() {
-    const db_host = config.get('database.host');
-    const db_port = config.get('database.port');
-    const db_user = config.get("database.user");
-    const db_name = config.get("database.name");
-    const db_password = config.get("database.password");
-    const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
 }
 
 function populateCollection (url, dbName, collection, elementsGenerator, number) {
@@ -50,6 +41,15 @@ function populateCollection (url, dbName, collection, elementsGenerator, number)
         client.close();
         console.log("Done !");
     });
+}
+
+function  getURL() {
+    const db_host = config.get('database.host');
+    const db_port = config.get('database.port');
+    const db_user = config.get("database.user");
+    const db_password = config.get("database.password");
+    const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
+    return db_url;
 }
 
 module.exports = { fakeCharacter ,

@@ -2,7 +2,7 @@ var appRoot = require("app-root-path");
 
 const config = {
     server: { // server info
-        port: "8080"
+        port: "3000"
     },
     database: { //database connection info
         host: 'localhost',
