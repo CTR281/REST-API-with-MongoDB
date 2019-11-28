@@ -5,25 +5,18 @@ const config = require('config');
 
 function fakeCharacter () {
     // return a fake rpg character
-    return { name: faker.name.lastName(),
+    return {
+        name: faker.name.lastName(),
         level: randomInt(1,100),
         class: faker.name.jobTitle() };
 }
 
 function parseCharacter(toParse) {
-    const array = toParse.split('|');
-    return { name: array[0],
-        level:parseInt(array[1]),
-        class: array[2] }
-}
-
-function  getURL() {
-    const db_host = config.get('database.host');
-    const db_port = config.get('database.port');
-    const db_user = config.get("database.user");
-    const db_name = config.get("database.name");
-    const db_password = config.get("database.password");
-    const db_url = `mongodb+srv://${db_user}:${db_password}@${db_host}` + (db_port ? `:${db_port}` : "") + "/";
+    const tokens = toParse.split('|');
+    return {
+        name: tokens[0],
+        level:parseInt(tokens[1]),
+        class: tokens[2] }
 }
 
 function populateCollection (url, dbName, collection, elementsGenerator, number) {
@@ -50,6 +43,14 @@ function populateCollection (url, dbName, collection, elementsGenerator, number)
         client.close();
         console.log("Done !");
     });
+}
+
+function  getURL() {
+    const host = config.get('database.host');
+    const port = config.get('database.port');
+    const user = config.get("database.user");
+    const password = config.get("database.password");
+    return `mongodb+srv://${user}:${password}@${host}` + (port ? `:${port}` : "") + "/";
 }
 
 module.exports = { fakeCharacter ,

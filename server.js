@@ -23,4 +23,4 @@ app.use('/rpg', apiRouter);
 
 app.use((req,res) => {
     res.status(404).send("This page does not exist");
-});
+
