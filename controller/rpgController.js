@@ -53,7 +53,7 @@ class rpgController{
 
             const db = client.db(DB.name);
             const collection  = req.params.collection;
-            const document = [req.body];
+            const document = req.body;
             console.log(document);
 
             rpgRepository.insertDocuments(db, collection, document, function(result) {

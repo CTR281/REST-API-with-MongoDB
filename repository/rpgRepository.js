@@ -38,7 +38,7 @@ insertDocuments = function(db, collection, data, callback) {
     const _collection = db.collection(collection);
     // Insert some documents
     console.log(data);
-    _collection.insertMany(data, function(err, result) {
+    _collection.insertOne(data, function(err, result) {
         result = "Inserted documents into the collection";
         console.log(result);
         callback({message:result});
